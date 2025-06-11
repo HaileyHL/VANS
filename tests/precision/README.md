@@ -50,7 +50,7 @@ is ready. If the generation failed, please open a GitHub issue and discuss the i
 To run the tests, execute the following command **in project root dir**:
 
 ```shell
-$ python3 tests/precision/precision_test.py test/precision
+$ python3 tests/precision/precision_test.py tests/precision
 ```
 
 You can modify the file `basedata.yml` to choose the test sets and change the test framework behaviour.

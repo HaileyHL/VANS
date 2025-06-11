@@ -1,0 +1,87 @@
+#ifndef ICXLPROTOCOLHANDLER_H
+#define ICXLPROTOCOLHANDLER_H
+
+#include <functional>
+#include <queue>
+#include <vector>
+#include <iostream>
+
+// Forward declarations of CxlCommand and CxlResponse
+struct CxlCommand {
+    enum class Type { Read, Write, Discover, Invalidate, Flush, Allocate, Deallocate };
+    Type type;
+    uint64_t address;
+    size_t size;
+    std::vector<uint8_t> data;
+};
+
+struct CxlResponse {
+    bool success;
+    std::vector<uint8_t> data;
+};
+
+class ICxlProtocolHandler {
+public:
+    virtual ~ICxlProtocolHandler() = default;
+
+    virtual bool issueCommand(const CxlCommand& cmd) = 0;
+
+    using ResponseCallback = std::function<void(const CxlResponse&)>;
+    virtual void registerResponseCallback(ResponseCallback cb) = 0;
+};
+
+// Simple mock implementation of ICxlProtocolHandler
+class MockCxlProtocolHandler : public ICxlProtocolHandler {
+public:
+    MockCxlProtocolHandler() : response_callback(nullptr) {}
+
+    bool issueCommand(const CxlCommand& cmd) override {
+        // Simulate processing command asynchronously by pushing to queue
+        command_queue.push(cmd);
+        processNextCommand();
+        return true;
+    }
+
+    void registerResponseCallback(ResponseCallback cb) override {
+        response_callback = cb;
+    }
+
+private:
+    void processNextCommand() {
+        if (command_queue.empty() || !response_callback) return;
+
+        CxlCommand cmd = command_queue.front();
+        command_queue.pop();
+
+        // Simulate a simple response based on command type
+        CxlResponse response;
+        response.success = true;
+
+        switch (cmd.type) {
+            case CxlCommand::Type::Read:
+                // Return dummy data of requested size
+                response.data = std::vector<uint8_t>(cmd.size, 0xAA);
+                break;
+            case CxlCommand::Type::Write:
+                // Acknowledge write success
+                response.data.clear();
+                break;
+            case CxlCommand::Type::Discover:
+                // Simulate discovery response
+                response.data = {'C', 'X', 'L', 'D'};
+                break;
+            default:
+                // Generic success for other commands
+                response.data.clear();
+                break;
+        }
+
+        // Invoke callback with simulated response
+        response_callback(response);
+    }
+
+    ResponseCallback response_callback;
+    std::queue<CxlCommand> command_queue;
+};
+
+#endif // ICXLPROTOCOLHANDLER_H

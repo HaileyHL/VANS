@@ -8,8 +8,8 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif ()
 
-add_executable(vans
-               src/vans.cpp
+# Core library target
+add_library(vans_core
                src/general/controller.h
                src/general/component.h
                src/general/utils.h
@@ -38,19 +38,28 @@ add_executable(vans
                src/general/ddr4_system.h
                src/general/factory.cpp
                src/general/common.h
+               src/cxl/cxl_vans_interfaces.h
+               src/cxl/ICxlMemory.h
+               src/cxl/ICxlProtocolHandler.h
                )
 
-target_include_directories(vans
+target_include_directories(vans_core
                            PUBLIC
                            src/general
                            PRIVATE
                            ${CMAKE_CURRENT_SOURCE_DIR}/src
                            )
 
-target_compile_options(vans PRIVATE -Wno-subobject-linkage)
+target_compile_options(vans_core PRIVATE -Wno-subobject-linkage)
+
+add_executable(vans src/vans.cpp)
+target_link_libraries(vans PRIVATE vans_core)
 
 include(CTest)
 enable_testing()
+
+add_subdirectory(tests/cxl)
+
 add_test(
         NAME TestPrecision
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}

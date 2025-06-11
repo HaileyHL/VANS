@@ -38,6 +38,12 @@ run these tests):
 $ python3 tests/precision/precision_test.py tests/precision
 ```
 
+To run cxl tests: after configuration, run the following:
+
+```shell
+$ ./bin/ICxlMemoryBasicTests
+```
+
 ## Issues
 
 We heavily refactor and rewrite the entire VANS code. These features are currently missing/not-tested, and we will add them soon:
