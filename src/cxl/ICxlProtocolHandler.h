@@ -5,10 +5,12 @@
 #include <queue>
 #include <vector>
 #include <iostream>
+#include <cstdint>
 
 // Forward declarations of CxlCommand and CxlResponse
 struct CxlCommand {
-    enum class Type { Read, Write, Discover, Invalidate, Flush, Allocate, Deallocate };
+    enum class Type { Read, Write, Discover, Invalidate, Flush, Allocate, Deallocate, Invalid };
+
     Type type;
     uint64_t address;
     size_t size;
@@ -70,6 +72,12 @@ private:
                 // Simulate discovery response
                 response.data = {'C', 'X', 'L', 'D'};
                 break;
+            case CxlCommand::Type::Invalid:
+                // Reject invalid response
+                response.success = false;
+                response.data.clear();
+                response_callback(response);
+                return;
             default:
                 // Generic success for other commands
                 response.data.clear();
