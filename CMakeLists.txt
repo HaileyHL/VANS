@@ -41,11 +41,17 @@ add_library(vans_core
                src/cxl/cxl_vans_interfaces.h
                src/cxl/ICxlMemory.h
                src/cxl/ICxlProtocolHandler.h
+               src/cxl/CxlTypes.h 
+               src/cxl/MockICxlDeviceInterface.h 
+               src/cxl/MockICxlHostInterface.h 
+               src/cxl/MockICxlDeviceInterface.cpp
+               src/cxl/MockICxlHostInterface.cpp
                )
 
 target_include_directories(vans_core
                            PUBLIC
                            src/general
+                           src/cxl
                            PRIVATE
                            ${CMAKE_CURRENT_SOURCE_DIR}/src
                            )

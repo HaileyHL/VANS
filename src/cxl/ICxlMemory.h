@@ -5,7 +5,13 @@
 #include <vector>
 #include <unordered_map>
 #include <cstring> // for memcpy
-
+/**
+ * @file ICxlMemory.h
+ * @brief Defines the ICxlMemory interface and a mock implementation for CXL memory simulation.
+ *
+ * This file contains the abstract interface ICxlMemory for CXL memory operations,
+ * as well as a simple mock implementation (MockCxlMemory) for testing and simulation.
+ */
 class ICxlMemory {
 public:
     virtual ~ICxlMemory() = default;
@@ -16,11 +22,27 @@ public:
     virtual void deallocate(uint64_t address) = 0;
 };
 
-// Simple mock implementation of ICxlMemory
+
+/**
+ * @class MockCxlMemory
+ * @brief A simple mock implementation of the ICxlMemory interface.
+ *
+ * This class simulates a memory device by managing memory allocations
+ * and read/write operations using an internal unordered_map. Each allocation
+ * is assigned a unique address, and memory is represented as a vector of bytes.
+ *
+ * The class is intended for testing and simulation purposes, providing
+ * basic functionality for memory operations without interacting with real hardware.
+ *
+ * @note This implementation is not thread-safe and is designed for single-threaded use.
+ */
 class MockCxlMemory : public ICxlMemory {
 public:
     MockCxlMemory() : next_free_address(1) {}
 
+    /**
+     * @brief Reads data from the specified address into the provided buffer.
+     */
     bool read(uint64_t address, uint8_t* buffer, size_t size) override {
         auto it = memory.find(address);
         if (it == memory.end() || it->second.size() < size) {
@@ -30,6 +52,9 @@ public:
         return true;
     }
 
+    /**
+     * @brief Writes data from the provided buffer to the specified address.
+     */
     bool write(uint64_t address, const uint8_t* data, size_t size) override {
         auto it = memory.find(address);
         if (it == memory.end() || it->second.size() < size) {

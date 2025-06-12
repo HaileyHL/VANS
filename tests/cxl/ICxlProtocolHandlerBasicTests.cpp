@@ -14,7 +14,7 @@ static CxlCommand CreateValidReadCommand() {
 
 static CxlCommand CreateInvalidCommand() {
     CxlCommand cmd;
-    cmd.type = CxlCommand::Type::Invalid;
+    cmd.type = CxlCommand::Type::Invalidate;
     cmd.size = 0;
     cmd.data.clear();
     return cmd;

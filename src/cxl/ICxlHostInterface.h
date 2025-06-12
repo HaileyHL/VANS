@@ -1,71 +1,28 @@
-#ifndef ICXLHOSTINTERFACE_H
-#define ICXLHOSTINTERFACE_H
+#ifndef CXLHOSTINTERFACE_H
+#define CXLHOSTINTERFACE_H
 
-#include "CXLVANS Interface.txt"  // Assumes CxlCommand and CxlResponse are defined here
-#include <queue>
+#include "CxlTypes.h"
+#include "ICxlDeviceInterface.h"
+#include <vector>
+#include <cstdint>
 #include <functional>
-#include <thread>
-#include <chrono>
 #include <mutex>
 #include <condition_variable>
 #include <iostream>
+#include <thread>
 
-class MockCxlHostInterface : public ICxlHostInterface {
+
+class ICxlHostInterface {
 public:
-    MockCxlHostInterface()
-        : device(nullptr), response_ready(false) {}
+    virtual ~ICxlHostInterface() = default;
 
-    void attachDevice(ICxlDeviceInterface* dev) {
-        device = dev;
-    }
+    // Send a CXL protocol command from host to device
+    virtual bool sendCommand(const CxlCommand& cmd) = 0;
 
-    bool sendCommand(const CxlCommand& cmd) override {
-        if (!device) return false;
+    // Receive response from device
+    virtual bool receiveResponse(CxlResponse& response) = 0;
 
-        std::cout << "[Host -> Device] Command sent: " << static_cast<int>(cmd.type)
-                  << " @ " << cmd.address << " (" << cmd.size << "B)\n";
-
-        std::unique_lock<std::mutex> lock(mutex);
-        sent_command = cmd;
-        response_ready = false;
-        
-        std::thread([this, cmd]() {
-            // Simulate latency
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
-            CxlResponse resp;
-            device->receiveCommand(cmd);  // device will handle and eventually call sendResponse
-        }).detach();
-
-        return true;
-    }
-
-    bool receiveResponse(CxlResponse& response) override {
-        std::unique_lock<std::mutex> lock(mutex);
-        if (!cv.wait_for(lock, std::chrono::milliseconds(100), [this]{ return response_ready; })) {
-            std::cerr << "[Host] Timeout waiting for response\n";
-            return false;
-        }
-        response = received_response;
-        std::cout << "[Device -> Host] Response received: success=" << response.success << "\n";
-        return true;
-    }
-
-    // Called by the device to deliver a response back to the host
-    void deliverResponse(const CxlResponse& response) {
-        std::lock_guard<std::mutex> lock(mutex);
-        received_response = response;
-        response_ready = true;
-        cv.notify_one();
-    }
-
-private:
-    ICxlDeviceInterface* device;
-    CxlCommand sent_command;
-    CxlResponse received_response;
-    bool response_ready;
-
-    std::mutex mutex;
-    std::condition_variable cv;
+    virtual void attachDevice(ICxlDeviceInterface* dev) = 0; // Add this
 };
 
-#endif // ICXLHOSTINTERFACE_H
+#endif // CXLHOSTINTERFACE_H

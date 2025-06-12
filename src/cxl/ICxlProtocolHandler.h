@@ -1,26 +1,12 @@
 #ifndef ICXLPROTOCOLHANDLER_H
 #define ICXLPROTOCOLHANDLER_H
 
+#include "CxlTypes.h"
 #include <functional>
 #include <queue>
 #include <vector>
 #include <iostream>
 #include <cstdint>
-
-// Forward declarations of CxlCommand and CxlResponse
-struct CxlCommand {
-    enum class Type { Read, Write, Discover, Invalidate, Flush, Allocate, Deallocate, Invalid };
-
-    Type type;
-    uint64_t address;
-    size_t size;
-    std::vector<uint8_t> data;
-};
-
-struct CxlResponse {
-    bool success;
-    std::vector<uint8_t> data;
-};
 
 class ICxlProtocolHandler {
 public:
@@ -32,7 +18,7 @@ public:
     virtual void registerResponseCallback(ResponseCallback cb) = 0;
 };
 
-// Simple mock implementation of ICxlProtocolHandler
+
 class MockCxlProtocolHandler : public ICxlProtocolHandler {
 public:
     MockCxlProtocolHandler() : response_callback(nullptr) {}
@@ -72,7 +58,7 @@ private:
                 // Simulate discovery response
                 response.data = {'C', 'X', 'L', 'D'};
                 break;
-            case CxlCommand::Type::Invalid:
+            case CxlCommand::Type::Invalidate:
                 // Reject invalid response
                 response.success = false;
                 response.data.clear();

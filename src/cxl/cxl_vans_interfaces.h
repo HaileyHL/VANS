@@ -1,3 +1,5 @@
+#include "CxlTypes.h"
+
 // Core Memory Simulation Layer
 class ICxlMemory {
 public:
@@ -39,31 +41,13 @@ public:
 
     // Receive response from device
     virtual bool receiveResponse(CxlResponse& response) = 0;
+
+    virtual void attachDevice(ICxlDeviceInterface* dev) = 0; // Add this
 };
 
 class ICxlDeviceInterface {
 public:
     virtual ~ICxlDeviceInterface() = default;
-
-    // Receive command from host
     virtual bool receiveCommand(const CxlCommand& cmd) = 0;
-
-    // Send response back to host
     virtual bool sendResponse(const CxlResponse& response) = 0;
-};
-
-// Example command and response structures
-struct CxlCommand {
-    enum class Type { Read, Write, Discover, Invalidate, Flush, Allocate, Deallocate };
-    Type type;
-    uint64_t address;
-    size_t size;
-    std::vector<uint8_t> data; // For write commands
-    // Additional protocol-specific fields...
-};
-
-struct CxlResponse {
-    bool success;
-    std::vector<uint8_t> data; // For read responses
-    // Additional response fields...
 };

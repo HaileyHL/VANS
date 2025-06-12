@@ -1,56 +1,21 @@
-#ifndef ICXLDEVICEINTERFACE_H
-#define ICXLDEVICEINTERFACE_H
+#ifndef CXLDEVICEINTERFACE_H
+#define CXLDEVICEINTERFACE_H
 
-#include "CXLVANS Interface.txt"  // Assumes CxlCommand and CxlResponse are defined here
-#include "ICxlHostInterface.h"
+#include "CxlTypes.h"
+#include <vector>
+#include <cstdint>
+#include <functional>
+#include <mutex>
+#include <condition_variable>
 #include <iostream>
 #include <thread>
-#include <chrono>
 
-class MockCxlDeviceInterface : public ICxlDeviceInterface {
+
+class ICxlDeviceInterface {
 public:
-    MockCxlDeviceInterface() : host(nullptr) {}
-
-    void attachHost(MockCxlHostInterface* h) {
-        host = h;
-    }
-
-    bool receiveCommand(const CxlCommand& cmd) override {
-        std::cout << "[Device] Received command: " << static_cast<int>(cmd.type)
-                  << " @ " << cmd.address << " (" << cmd.size << "B)\n";
-
-        std::thread([this, cmd]() {
-            // Simulate processing delay
-            std::this_thread::sleep_for(std::chrono::milliseconds(15));
-
-            CxlResponse response;
-            response.success = true;
-
-            if (cmd.type == CxlCommand::Type::Read) {
-                response.data = std::vector<uint8_t>(cmd.size, 0xBB);
-            } else if (cmd.type == CxlCommand::Type::Write) {
-                // Simulate write acknowledgment
-                response.data.clear();
-            } else {
-                response.data = {'D', 'E', 'V'};  // Generic response
-            }
-
-            sendResponse(response);
-        }).detach();
-
-        return true;
-    }
-
-    bool sendResponse(const CxlResponse& response) override {
-        if (!host) return false;
-
-        std::cout << "[Device -> Host] Sending response: success=" << response.success << "\n";
-        host->deliverResponse(response);
-        return true;
-    }
-
-private:
-    MockCxlHostInterface* host;
+    virtual ~ICxlDeviceInterface() = default;
+    virtual bool receiveCommand(const CxlCommand& cmd) = 0;
+    virtual bool sendResponse(const CxlResponse& response) = 0;
 };
 
-#endif // ICXLDEVICEINTERFACE_H
+#endif // CXLDEVICEINTERFACE_H
