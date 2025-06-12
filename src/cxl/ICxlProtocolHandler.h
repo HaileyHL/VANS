@@ -16,6 +16,12 @@ public:
 
     using ResponseCallback = std::function<void(const CxlResponse&)>;
     virtual void registerResponseCallback(ResponseCallback cb) = 0;
+
+    using CommandCallback = std::function<void(const CxlCommand&)>;
+    virtual void registerCommandCallback(CommandCallback cb) = 0;
+
+    virtual void invokeResponse(const CxlResponse& resp) = 0;
+
 };
 
 
@@ -23,15 +29,27 @@ class MockCxlProtocolHandler : public ICxlProtocolHandler {
 public:
     MockCxlProtocolHandler() : response_callback(nullptr) {}
 
+    CommandCallback command_callback;
+
     bool issueCommand(const CxlCommand& cmd) override {
-        // Simulate processing command asynchronously by pushing to queue
-        command_queue.push(cmd);
-        processNextCommand();
+        if (command_callback) {
+            command_callback(cmd);
+        }
         return true;
+    }
+
+    void registerCommandCallback(CommandCallback cb) override {
+        command_callback = cb;
     }
 
     void registerResponseCallback(ResponseCallback cb) override {
         response_callback = cb;
+    }
+
+    void invokeResponse(const CxlResponse& resp) override {
+        if (response_callback) {
+            response_callback(resp);
+        }
     }
 
 private:
