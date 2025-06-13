@@ -1,7 +1,7 @@
 #include "CxlCommandProcessor.h"
 #include <cstring>
 
-CxlCommandProcessor::CxlCommandProcessor(ICxlMemory* memory, ICxlProtocolHandler* protocol)
+CxlCommandProcessor::CxlCommandProcessor(CxlMemory* memory, CxlProtocolHandler* protocol)
     : memory_(memory), protocol_(protocol) {}
 
 void CxlCommandProcessor::initialize() {

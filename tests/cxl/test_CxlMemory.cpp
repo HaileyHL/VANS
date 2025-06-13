@@ -1,4 +1,4 @@
-#include "../src/cxl/ICxlMemory.h"
+#include "../src/cxl/MockCxlMemory.h"
 #include <cassert>
 #include <cstring>
 #include <iostream>
@@ -69,6 +69,6 @@ int main() {
     testReadWrite();
     testReadWriteBoundary();
 
-    std::cout << "All ICxlMemory basic tests passed.\n";
+    std::cout << "All CxlMemory basic tests passed.\n";
     return 0;
 }

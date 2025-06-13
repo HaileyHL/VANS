@@ -2,21 +2,21 @@
 #define CXL_COMMAND_PROCESSOR_H
 
 #include "CxlTypes.h"
-#include "ICxlProtocolHandler.h"
-#include "ICxlMemory.h" // For ICxlMemory
+#include "CxlProtocolHandlerImpl.h"
+#include "cxl_vans_interfaces.h"
 
 class CxlCommandProcessor {
 public:
-    CxlCommandProcessor(ICxlMemory* memory, ICxlProtocolHandler* protocol);
+    CxlCommandProcessor(CxlMemory* memory, CxlProtocolHandler* protocol);
 
     void initialize();  // Registers the dispatcher callback with the protocol handler
 
 private:
     void handleCommand(const CxlCommand& cmd);  // Translates and processes commands
 
-    ICxlMemory* memory_;
-    ICxlProtocolHandler* protocol_;
-    ICxlProtocolHandler::ResponseCallback response_callback_;
+    CxlMemory* memory_;
+    CxlProtocolHandler* protocol_;
+    CxlProtocolHandler::ResponseCallback response_callback_;
 };
 
 #endif // CXL_COMMAND_PROCESSOR_H

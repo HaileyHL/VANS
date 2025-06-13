@@ -1,5 +1,5 @@
-#include "MockICxlDeviceInterface.h"
-#include "MockICxlHostInterface.h"
+#include "MockCxlDeviceInterface.h"
+#include "MockCxlHostInterface.h"
 #include <iostream>
 #include <thread>
 #include <chrono>

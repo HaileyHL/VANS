@@ -1,31 +1,16 @@
-#ifndef ICXLPROTOCOLHANDLER_H
-#define ICXLPROTOCOLHANDLER_H
+#ifndef MOCKCxlPROTOCOLHANDLER_H
+#define MOCKCxlPROTOCOLHANDLER_H
 
 #include "CxlTypes.h"
+#include "cxl_vans_interfaces.h"
 #include <functional>
 #include <queue>
 #include <vector>
 #include <iostream>
 #include <cstdint>
 
-class ICxlProtocolHandler {
-public:
-    virtual ~ICxlProtocolHandler() = default;
 
-    virtual bool issueCommand(const CxlCommand& cmd) = 0;
-
-    using ResponseCallback = std::function<void(const CxlResponse&)>;
-    virtual void registerResponseCallback(ResponseCallback cb) = 0;
-
-    using CommandCallback = std::function<void(const CxlCommand&)>;
-    virtual void registerCommandCallback(CommandCallback cb) = 0;
-
-    virtual void invokeResponse(const CxlResponse& resp) = 0;
-
-};
-
-
-class MockCxlProtocolHandler : public ICxlProtocolHandler {
+class MockCxlProtocolHandler : public CxlProtocolHandler {
 public:
     MockCxlProtocolHandler() : response_callback(nullptr) {}
 
@@ -96,4 +81,4 @@ private:
     std::queue<CxlCommand> command_queue;
 };
 
-#endif // ICXLPROTOCOLHANDLER_H
+#endif // MOCKCxlPROTOCOLHANDLER_H

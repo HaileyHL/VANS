@@ -1,31 +1,15 @@
-#ifndef ICXLMEMORY_H
-#define ICXLMEMORY_H
+#ifndef MOCKCxlMEMORY_H
+#define MOCKCxlMEMORY_H
 
 #include <cstdint>
 #include <vector>
 #include <unordered_map>
 #include <cstring> // for memcpy
-/**
- * @file ICxlMemory.h
- * @brief Defines the ICxlMemory interface and a mock implementation for CXL memory simulation.
- *
- * This file contains the abstract interface ICxlMemory for CXL memory operations,
- * as well as a simple mock implementation (MockCxlMemory) for testing and simulation.
- */
-class ICxlMemory {
-public:
-    virtual ~ICxlMemory() = default;
-
-    virtual bool read(uint64_t address, uint8_t* buffer, size_t size) = 0;
-    virtual bool write(uint64_t address, const uint8_t* data, size_t size) = 0;
-    virtual uint64_t allocate(size_t size) = 0;
-    virtual void deallocate(uint64_t address) = 0;
-};
-
+#include "cxl_vans_interfaces.h" 
 
 /**
  * @class MockCxlMemory
- * @brief A simple mock implementation of the ICxlMemory interface.
+ * @brief A simple mock implementation of the CxlMemory interface.
  *
  * This class simulates a memory device by managing memory allocations
  * and read/write operations using an internal unordered_map. Each allocation
@@ -36,7 +20,7 @@ public:
  *
  * @note This implementation is not thread-safe and is designed for single-threaded use.
  */
-class MockCxlMemory : public ICxlMemory {
+class MockCxlMemory : public CxlMemory {
 public:
     MockCxlMemory() : next_free_address(1) {}
 
@@ -79,4 +63,4 @@ private:
     std::unordered_map<uint64_t, std::vector<uint8_t>> memory;
 };
 
-#endif // ICXLMEMORY_H
+#endif // MOCKCxlMEMORY_H

@@ -41,15 +41,16 @@ add_library(vans_core
                src/cxl/cxl_vans_interfaces.h
                src/cxl/CxlCommandProcessor.cpp
                src/cxl/CxlCommandProcessor.h
-               src/cxl/ICxlMemory.h
-               src/cxl/ICxlProtocolHandler.h
+               src/cxl/MockCxlMemory.h
+               src/cxl/MockCxlProtocolHandler.h
                src/cxl/CxlTypes.h 
-               src/cxl/MockICxlDeviceInterface.h 
-               src/cxl/MockICxlHostInterface.h 
-               src/cxl/MockICxlDeviceInterface.cpp
-               src/cxl/MockICxlHostInterface.cpp
-               src/cxl/ICxlDeviceInterface.h
-               src/cxl/ICxlHostInterface.h 
+               src/cxl/MockCxlDeviceInterface.h 
+               src/cxl/MockCxlHostInterface.h 
+               src/cxl/MockCxlDeviceInterface.cpp
+               src/cxl/MockCxlHostInterface.cpp
+               src/cxl/CxlProtocolHandlerImpl.h
+               src/cxl/CxlDeviceInterfaceImpl.h
+               src/cxl/CxlHostInterfaceImpl.h
                )
 
 target_include_directories(vans_core

@@ -1,4 +1,4 @@
-#include "MockICxlHostInterface.h"
+#include "MockCxlHostInterface.h"
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -6,7 +6,7 @@
 MockCxlHostInterface::MockCxlHostInterface()
     : device(nullptr), response_ready(false) {}
 
-void MockCxlHostInterface::attachDevice(ICxlDeviceInterface* dev) {
+void MockCxlHostInterface::attachDevice(CxlDeviceInterface* dev) {
     device = dev;
 }
 
@@ -47,7 +47,7 @@ void MockCxlHostInterface::deliverResponse(const CxlResponse& response) {
 }
 
 // Failed Attempt [Session 18]
-// class MockCxlDeviceInterface : public ICxlDeviceInterface {
+// class MockCxlDeviceInterface : public CxlDeviceInterface {
 // public:
 //     MockCxlDeviceInterface();
 

@@ -1,12 +1,12 @@
 #ifndef MOCKCXLDEVICEINTERFACE_H
 #define MOCKCXLDEVICEINTERFACE_H
 
-#include "ICxlDeviceInterface.h"
+#include "cxl_vans_interfaces.h"
 #include "CxlTypes.h"
 
 class MockCxlHostInterface; // forward declaration
 
-class MockCxlDeviceInterface : public ICxlDeviceInterface {
+class MockCxlDeviceInterface : public CxlDeviceInterface {
 public:
     MockCxlDeviceInterface();
 
@@ -22,7 +22,7 @@ private:
 
 
 // Failed Attempt [Session 18]
-// class MockCxlHostInterface : public ICxlHostInterface {
+// class MockCxlHostInterface : public CxlHostInterface {
 // public:
 //     MockCxlHostInterface();
 
@@ -56,7 +56,7 @@ private:
 //     /**
 //      * @brief Attaches a mock device interface for communication.
 //      */
-//     void attachDevice(ICxlDeviceInterface* dev) {
+//     void attachDevice(CxlDeviceInterface* dev) {
 //         attachedDevice = dev;
 //     }
 
@@ -77,5 +77,5 @@ private:
 // private:
 //     std::vector<CxlCommand> sentCommands;
 //     std::queue<CxlResponse> responseQueue;
-//     ICxlDeviceInterface* attachedDevice = nullptr;
+//     CxlDeviceInterface* attachedDevice = nullptr;
 // };

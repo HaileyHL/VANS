@@ -1,9 +1,25 @@
+#ifndef CXL_VANS_INTERFACES_H
+#define CXL_VANS_INTERFACES_H
+
+// Forward declarations
+class CxlDeviceInterface;
+class CxlHostInterface;
+class CxlMemory;
+class CxlProtocolHandler;
+
+
 #include "CxlTypes.h"
 
+#include <cstdint>
+#include <vector>
+#include <functional>
+#include <unordered_map>
+#include <cstring> 
+
 // Core Memory Simulation Layer
-class ICxlMemory {
+class CxlMemory {
 public:
-    virtual ~ICxlMemory() = default;
+    virtual ~CxlMemory() = default;
 
     // Read data from CXL memory at given address
     virtual bool read(uint64_t address, uint8_t* buffer, size_t size) = 0;
@@ -19,22 +35,26 @@ public:
 };
 
 // CXL Protocol Simulation Layer
-class ICxlProtocolHandler {
+class CxlProtocolHandler {
 public:
-    virtual ~ICxlProtocolHandler() = default;
+    virtual ~CxlProtocolHandler() = default;
 
-    // Issue a CXL protocol command (e.g., device discovery, coherency command)
     virtual bool issueCommand(const CxlCommand& cmd) = 0;
 
-    // Register callback to receive memory operation responses
     using ResponseCallback = std::function<void(const CxlResponse&)>;
     virtual void registerResponseCallback(ResponseCallback cb) = 0;
+
+    using CommandCallback = std::function<void(const CxlCommand&)>;
+    virtual void registerCommandCallback(CommandCallback cb) = 0;
+
+    virtual void invokeResponse(const CxlResponse& resp) = 0;
+
 };
 
 // Communication Interface Layer
-class ICxlHostInterface {
+class CxlHostInterface {
 public:
-    virtual ~ICxlHostInterface() = default;
+    virtual ~CxlHostInterface() = default;
 
     // Send a CXL protocol command from host to device
     virtual bool sendCommand(const CxlCommand& cmd) = 0;
@@ -42,12 +62,14 @@ public:
     // Receive response from device
     virtual bool receiveResponse(CxlResponse& response) = 0;
 
-    virtual void attachDevice(ICxlDeviceInterface* dev) = 0; // Add this
+    virtual void attachDevice(CxlDeviceInterface* dev) = 0; // Add this
 };
 
-class ICxlDeviceInterface {
+class CxlDeviceInterface {
 public:
-    virtual ~ICxlDeviceInterface() = default;
+    virtual ~CxlDeviceInterface() = default;
     virtual bool receiveCommand(const CxlCommand& cmd) = 0;
     virtual bool sendResponse(const CxlResponse& response) = 0;
 };
+
+#endif // CXL_VANS_INTERFACES_H

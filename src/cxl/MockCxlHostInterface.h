@@ -1,22 +1,22 @@
 #ifndef MOCKCXLHOSTINTERFACE_H
 #define MOCKCXLHOSTINTERFACE_H
 
-#include "ICxlHostInterface.h"
+#include "cxl_vans_interfaces.h"
 #include "CxlTypes.h"
 #include <mutex>
 #include <condition_variable>
 
-class MockCxlHostInterface : public ICxlHostInterface {
+class MockCxlHostInterface : public CxlHostInterface {
 public:
     MockCxlHostInterface();
 
-    void attachDevice(ICxlDeviceInterface* dev) override;
+    void attachDevice(CxlDeviceInterface* dev) override;
     bool sendCommand(const CxlCommand& cmd) override;
     bool receiveResponse(CxlResponse& response) override;
     void deliverResponse(const CxlResponse& response);
 
 private:
-    ICxlDeviceInterface* device;
+    CxlDeviceInterface* device;
     CxlCommand sent_command;
     CxlResponse received_response;
     bool response_ready;

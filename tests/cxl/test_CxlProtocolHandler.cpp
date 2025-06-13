@@ -1,7 +1,7 @@
-// ICxlProtocolHandlerBasicTests.cpp
+// CxlProtocolHandlerBasicTests.cpp
 #include <iostream>
 #include <cassert>
-#include "../src/cxl/ICxlProtocolHandler.h"
+#include "../src/cxl/MockCxlProtocolHandler.h"
 
 // Helper functions to create commands for testing
 static CxlCommand CreateValidReadCommand() {
@@ -62,7 +62,7 @@ void TestCommandBoundaryConditions() {
 }
 
 int main() {
-    std::cout << "Starting ICxlProtocolHandlerBasicTests...\n";
+    std::cout << "Starting CxlProtocolHandlerBasicTests...\n";
 
     TestValidReadCommand();
     TestInvalidCommandRejected();

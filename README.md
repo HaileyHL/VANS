@@ -41,7 +41,7 @@ $ python3 tests/precision/precision_test.py tests/precision
 To run cxl tests: after configuration, run the following:
 
 ```shell
-$ ./bin/ICxlMemoryBasicTests
+$ ./bin/CxlMemoryBasicTests
 ```
 
 ## Issues
