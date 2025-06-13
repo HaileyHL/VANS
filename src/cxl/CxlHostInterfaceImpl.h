@@ -8,8 +8,8 @@
 #include <cstdint>
 #include <functional>
 #include <memory>
-#include "CxlDeviceInterfaceImpl.cpp" 
-#include "CxlProtocolHandlerImpl.cpp"
+#include "CxlDeviceInterfaceImpl.h" 
+#include "CxlProtocolHandlerImpl.h"
 
 class CxlHostInterfaceImpl : public CxlHostInterface {
     CxlDeviceInterface* device_ = nullptr;
@@ -25,8 +25,21 @@ public:
     }
 
     bool receiveResponse(CxlResponse& response) override {
-        // Stub: you can extend this to buffer and pop from a queue if needed
+        if (!response_ready_) return false;
+        response = response_;
+        response_ready_ = false;
         std::cout << "Received response: " << (response.success ? "Success" : "Failure") << std::endl;
         return true;
     }
+
+    void setResponse(const CxlResponse& resp) {
+        // Store the response and mark it as ready, or handle as appropriate for your design
+        this->response_ = resp;
+        this->response_ready_ = true;
+    }
+private:
+    CxlResponse response_;
+    bool response_ready_ = false;
 };
+
+#endif // CXL_HOST_INTERFACE_IMPL_H

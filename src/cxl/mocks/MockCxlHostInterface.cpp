@@ -46,6 +46,13 @@ void MockCxlHostInterface::deliverResponse(const CxlResponse& response) {
     cv.notify_one();
 }
 
+void MockCxlHostInterface::setResponse(const CxlResponse& resp) {
+    std::unique_lock<std::mutex> lock(mutex);
+    received_response = resp;
+    response_ready = true;
+    cv.notify_all();
+}
+
 // Failed Attempt [Session 18]
 // class MockCxlDeviceInterface : public CxlDeviceInterface {
 // public:

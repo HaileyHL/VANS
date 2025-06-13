@@ -2,10 +2,9 @@
 #define CXL_DEVICE_INTERFACE_IMPL_H
 
 #include "cxl_vans_interfaces.h"
-#include "CxlTypes.h"
 #include "CxlProtocolHandlerImpl.h"
-#include <functional>
-#include <vector>
+// #include "CxlHostInterfaceImpl.h"
+#include "CxlTypes.h"
 
 class CxlDeviceInterfaceImpl : public CxlDeviceInterface {
     CxlProtocolHandler* handler_;
@@ -15,7 +14,7 @@ public:
     CxlDeviceInterfaceImpl(CxlProtocolHandler* h, CxlHostInterface* host)
         : handler_(h), host_(host) {
         handler_->registerResponseCallback([this](const CxlResponse& resp) {
-            host_->receiveResponse(const_cast<CxlResponse&>(resp));
+            this->host_->setResponse(resp);  // now valid
         });
     }
 

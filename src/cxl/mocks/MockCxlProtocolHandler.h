@@ -16,6 +16,10 @@ public:
 
     CommandCallback command_callback;
 
+    bool WasReadCommandProcessed() const {
+        return read_command_processed;
+    }
+
     bool issueCommand(const CxlCommand& cmd) override {
         if (command_callback) {
             command_callback(cmd);
@@ -38,6 +42,9 @@ public:
     }
 
 private:
+
+    bool read_command_processed;
+
     void processNextCommand() {
         if (command_queue.empty() || !response_callback) return;
 

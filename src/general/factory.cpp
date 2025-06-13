@@ -9,6 +9,7 @@
 #include "rmc.h"
 #include "rmw.h"
 #include "utils.h"
+#include "cxl_system.h"
 
 namespace vans::factory
 {
@@ -24,6 +25,8 @@ make_single_component(const std::string &name, const root_config &cfg, unsigned 
         ret = std::make_shared<ddr4_system::ddr4_system>(cfg["ddr4_system"]);
     } else if (name == "nvram_system") {
         ret = std::make_shared<nvram_system::nvram_system>(cfg["nvram_system"]);
+    } else if (name == "cxl_system") {
+        ret = std::make_shared<cxl_system::cxl_system>(cfg["cxl_system"]);
     } else if (name == "rmw") {
         ret = std::make_shared<rmw::rmw>(cfg["rmw"]);
     } else if (name == "ait") {

@@ -14,6 +14,7 @@ public:
     bool sendCommand(const CxlCommand& cmd) override;
     bool receiveResponse(CxlResponse& response) override;
     void deliverResponse(const CxlResponse& response);
+    void setResponse(const CxlResponse& resp) override;
 
 private:
     CxlDeviceInterface* device;

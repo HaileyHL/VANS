@@ -63,6 +63,8 @@ public:
     virtual bool receiveResponse(CxlResponse& response) = 0;
 
     virtual void attachDevice(CxlDeviceInterface* dev) = 0; // Add this
+
+    virtual void setResponse(const CxlResponse& resp) = 0; // <-- Add this
 };
 
 class CxlDeviceInterface {
