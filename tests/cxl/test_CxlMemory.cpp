@@ -1,4 +1,4 @@
-#include "../src/cxl/MockCxlMemory.h"
+#include "../src/cxl/mocks/MockCxlMemory.h"
 #include <cassert>
 #include <cstring>
 #include <iostream>

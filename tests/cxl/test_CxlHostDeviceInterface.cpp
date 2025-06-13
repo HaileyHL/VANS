@@ -1,5 +1,5 @@
-#include "../src/cxl/MockCxlHostInterface.h"
-#include "../src/cxl/MockCxlDeviceInterface.h"
+#include "../src/cxl/mocks/MockCxlHostInterface.h"
+#include "../src/cxl/mocks/MockCxlDeviceInterface.h"
 #include <cassert>
 #include <iostream>
 #include <chrono>

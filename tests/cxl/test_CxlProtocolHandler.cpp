@@ -1,7 +1,7 @@
 // CxlProtocolHandlerBasicTests.cpp
 #include <iostream>
 #include <cassert>
-#include "../src/cxl/MockCxlProtocolHandler.h"
+#include "../src/cxl/mocks/MockCxlProtocolHandler.h"
 
 // Helper functions to create commands for testing
 static CxlCommand CreateValidReadCommand() {

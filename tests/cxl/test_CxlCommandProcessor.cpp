@@ -1,6 +1,6 @@
 #include "../src/cxl/CxlCommandProcessor.h"
-#include "../src/cxl/MockCxlMemory.h"
-#include "../src/cxl/MockCxlProtocolHandler.h"
+#include "../src/cxl/mocks/MockCxlMemory.h"
+#include "../src/cxl/mocks/MockCxlProtocolHandler.h"
 #include "CxlTypes.h"
 #include <cassert>
 #include <iostream>
